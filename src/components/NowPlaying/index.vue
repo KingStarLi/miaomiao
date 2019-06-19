@@ -4,10 +4,10 @@
         <Scroller v-else :handleToScroll="handleToScroll" :handleToTouchEnd="handleToTouchEnd">
             <ul>
                 <p>{{pullDownMsg}}</p>
-                <li v-for="item in movieList " :key="item.id">
-                    <div class="pic_show" @tap="handleToDetail"><img :src="item.img | setWH('128.180')"></div>
+                <li v-for="item in movieList " :key="item.id" >
+                    <div class="pic_show" @tap="handleToDetail(item.id)"><img :src="item.img | setWH('128.180')"></div>
                     <div class="info_list">
-                        <h2>{{item.nm}} </h2><span v-if="item.version">3D</span>
+                        <h2 @tap="handleToDetail(item.id)">{{item.nm}} </h2><span v-if="item.version">3D</span>
                         <p>观众评 <span class="grade">{{item.sc}}</span></p>
                         <p>主演: {{item.star}}</p>
                         <p>{{item.showInfo}}</p>
@@ -39,8 +39,7 @@ export default {
         var cityId = this.$store.state.city.id;
         if( this.prevCityId === cityId ){return;}
         this.isLoading = true;
-        console.log(cityId)
-        console.log(this.prevCityId)
+        
         this.axios.get('/api/movieOnInfoList?cityId='+cityId).then((res)=>{
             var msg = res.data.msg;
             if(msg==='ok'){
@@ -81,8 +80,9 @@ export default {
         });
     },
     methods:{
-        handleToDetail(){
-            console.log(1234)
+        handleToDetail(movieId){
+            // console.log(movieId)
+            this.$router.push('/movie/detail/1/'+movieId);
         },
         handleToScroll(pos){
             if (pos.y>10) {
